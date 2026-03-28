@@ -1,0 +1,79 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║   WIRING — PILOT (FTDI 6-pin 2x3)                                   ║
+║   Plik: main_rtscts.py  lub  main.py                                 ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+  ZLACZE PILOTA — widok na gniazdo (gora pilota):
+
+         (Gora pilota)
+         ┌──────────────────┐
+         │  [2]  [4]  [6]  │
+         │  RTS  TXD  RXD  │
+         │  [1]  [3]  [5]  │
+         │  VDD  GND RESET │
+         └──────────────────┘
+         (Dol pilota)
+
+  TABELA PINOW PILOTA:
+  ┌─────┬────────┬───────────────────────────────────────────────────┐
+  │ Pin │ Sygnal │ Opis / Kolor kabla FTDI                           │
+  ├─────┼────────┼───────────────────────────────────────────────────┤
+  │  1  │ VDD    │ Zasilanie  (nie podlaczac — pilot ma baterie)     │
+  │  2  │ RTS    │ Request To Send  (Zolty)                          │
+  │  3  │ GND    │ Masa  (Czarny)                                    │
+  │  4  │ TXD    │ Transmisja danych  (Zielony)                      │
+  │  5  │ RESET  │ Reset procesora  (nie podlaczac)                  │
+  │  6  │ RXD    │ Odbiór danych  (Bialy)                            │
+  └─────┴────────┴───────────────────────────────────────────────────┘
+
+  SCHEMAT POLACZEN PICO ↔ PILOT:
+
+    PC (terminal)       PICO v1                    PILOT (zlacze 6-pin)
+    ─────────────       ──────────────────────      ─────────────────────
+                       ┌─────────────────────┐      ┌──────────────────┐
+                       │      [micro USB]    │      │  [2]  [4]  [6]  │
+                       │                     │      │  RTS  TXD  RXD  │
+                       │                     │      │  [1]  [3]  [5]  │
+                       │                     │      │  VDD  GND RESET │
+                       │                     │      └──┬───┬───┬───┬──┘
+  ──────────────────── ┤ GP0  [ 1]  TX  ●   ├─────────┼───┼───┼►[6] RXD  (Bialy)
+                       │                     │         │   │   │
+  ──────────────────── ┤ GP1  [ 2]  RX  ●   ├◄────────┼───┼──[4] TXD  (Zielony)
+                       │                     │         │   │
+  ──────────────────── ┤ GND  [ 3]  ■        ├─────────┼──[3] GND  (Czarny)
+                       │                     │         │
+                       ┤ GP2  [ 4]  CTS ●   ├◄───────[2] RTS  (Zolty)  [opcja]
+                       │                     │
+                       ┤ GP3  [ 5]  RTS ●   │   NIE PODLACZAC (pilot nie ma CTS)
+                       │                     │
+                       │  ● LED (GP25)       │   [1] VDD   — NIE PODLACZAC
+                       └─────────────────────┘   [5] RESET — NIE PODLACZAC
+
+  SCHEMAT LINIOWY — PRZEWODY:
+
+    PICO GP0 (pin 1)  TX  ────────────────────────►  [6] RXD  pilota  (Bialy)
+    PICO GP1 (pin 2)  RX  ◄────────────────────────  [4] TXD  pilota  (Zielony)
+    PICO GND (pin 3)  ■   ──────────────────────────  [3] GND  pilota  (Czarny)
+    PICO GP2 (pin 4)  CTS ◄────────────────────────  [2] RTS  pilota  (Zolty)  [opcja]
+
+    NIE PODLACZAC: [1] VDD — pilot zasilany bateriami
+    NIE PODLACZAC: [5] RESET — zresetuje procesor pilota
+
+  POZIOMY NAPIECIA:
+    Sprawdz napiecie logiczne pilota (czesto 3.3V lub 5V).
+    Pico pracuje na 3.3V — jesli pilot ma 5V uzyj konwertera poziomow!
+
+  KONFIGURACJA TERMINALA:
+    Baudrate : najczesciej 9600 lub 115200 — sprawdz dokumentacje pilota
+    Bity     : 8
+    Parzystosc: brak (lub Even — sprawdz spec pilota)
+    Stop     : 1
+    Flow ctrl: brak  (lub Hardware jesli uzyto RTS na GP2)
+
+  WARIANT BEZ FLOW CONTROL (najprostszy):
+    mpremote cp main.py :main.py + reset
+    Wpisz +++ -> wybierz baudrate pilota -> [go]
+
+  WARIANT Z RTS (jesli pilot wymaga flow control):
+    mpremote cp main_rtscts.py :main.py + reset
+    Wpisz +++ -> [rts] -> wybierz baudrate -> [go]
