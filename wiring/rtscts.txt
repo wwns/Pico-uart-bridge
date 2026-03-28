@@ -1,0 +1,60 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║   WIRING — RTS / CTS  (hardware flow control)                       ║
+║   Plik: main_rtscts.py                                               ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+  Uzywane piny: GP0 (TX), GP1 (RX), GP2 (CTS), GP3 (RTS), GND
+
+  PC                 PICO v1                       URZADZENIE
+  ────               ──────────────────────         ──────────────
+                    ┌─────────────────────┐
+                    │      [micro USB]    │◄──USB──  PC (PuTTY/COM)
+                    │                     │
+   ─────────────────┤ GP0  [ 1]  TX  ●   ├──────────────────► RX
+                    │                     │
+   ─────────────────┤ GP1  [ 2]  RX  ●   ├◄────────────────── TX
+                    │                     │
+   ─────────────────┤ GND  [ 3]  ■       ├──────────────────── GND
+                    │                     │
+                    ┤ GP2  [ 4]  CTS ●   ├◄────────────────── RTS  urzadzenia
+                    │                     │
+                    ┤ GP3  [ 5]  RTS ●   ├──────────────────► CTS  urzadzenia
+                    │                     │
+                    │     (inne piny      │
+                    │      nieuzywane)    │
+                    │                     │
+                    │  ● LED (GP25)       │
+                    └─────────────────────┘
+
+  SCHEMAT POLACZEN:
+
+    PICO GP0 (pin 1)  TX  ─────────────────────────►  RX  urzadzenia
+    PICO GP1 (pin 2)  RX  ◄─────────────────────────  TX  urzadzenia
+    PICO GP2 (pin 4)  CTS ◄─────────────────────────  RTS urzadzenia
+    PICO GP3 (pin 5)  RTS ─────────────────────────►  CTS urzadzenia
+    PICO GND (pin 3)  ■   ─────────────────────────── GND urzadzenia
+
+  JAK DZIALA FLOW CONTROL:
+    RTS (Request To Send) — Pico sygnalizuje urzadzeniu ze jest gotowe
+    CTS (Clear To Send)   — urzadzenie sygnalizuje ze Pico moze wysylac
+
+    Pico GP3 (RTS) ──► urzadzenie CTS:  "jestem gotowy, mozesz do mnie wysylac"
+    Pico GP2 (CTS) ◄── urzadzenie RTS:  "urzadzenie gotowe, mozesz wysylac"
+
+  POZIOMY NAPIECIA:
+    Sygnaly UART + RTS/CTS: 3.3V  (NIE podlaczac 5V wprost!)
+    Jesli urzadzenie pracuje na 5V — uzyj konwertera poziomow.
+
+  KONFIGURACJA TERMINALA (PC):
+    Baudrate : 115200  (domyslny, zmiana przez menu +++)
+    Bity     : 8
+    Parzystosc: brak
+    Stop     : 1
+    Flow ctrl: Hardware (RTS/CTS)
+
+  URUCHOMIENIE:
+    mpremote cp main_rtscts.py :main.py + reset
+    Otworz terminal na COM Pico @ 115200 baud
+    Wpisz +++ aby otworzyc menu
+    Wpisz [rts] aby wlaczyc/wylaczyc hardware flow control
+    Wpisz [go]  aby wrocic do trybu bridge

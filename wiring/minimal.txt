@@ -1,0 +1,45 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║   WIRING — MINIMUM  (TX / RX / GND)                                 ║
+║   Plik: main.py  |  main_en.py                                       ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+  Uzywane piny: GP0 (TX), GP1 (RX), GND
+
+  PC                 PICO v1                       URZADZENIE
+  ────               ──────────────────────         ──────────────
+                    ┌─────────────────────┐
+                    │      [micro USB]    │◄──USB──  PC (PuTTY/COM)
+                    │                     │
+   ─────────────────┤ GP0  [ 1]  TX  ●   ├──────────────────► RX
+                    │                     │
+   ─────────────────┤ GP1  [ 2]  RX  ●   ├◄────────────────── TX
+                    │                     │
+   ─────────────────┤ GND  [ 3]  ■       ├──────────────────── GND
+                    │                     │
+                    │     (inne piny      │
+                    │      nieuzywane)    │
+                    │                     │
+                    │  ● LED (GP25)       │
+                    └─────────────────────┘
+
+  SCHEMAT POLACZEN:
+
+    PICO GP0 (pin 1)  TX  ─────────────────────────►  RX  urzadzenia
+    PICO GP1 (pin 2)  RX  ◄─────────────────────────  TX  urzadzenia
+    PICO GND (pin 3)  ■   ─────────────────────────── GND urzadzenia
+
+  POZIOMY NAPIECIA:
+    Sygnaly UART: 3.3V  (NIE podlaczac 5V wprost do GP0/GP1!)
+    Jesli urzadzenie pracuje na 5V — uzyj konwertera poziomow.
+
+  KONFIGURACJA TERMINALA (PC):
+    Baudrate : 115200  (domyslny, zmiana przez menu +++)
+    Bity     : 8
+    Parzystosc: brak
+    Stop     : 1
+    Flow ctrl: brak
+
+  URUCHOMIENIE:
+    mpremote cp main.py :main.py + reset
+    Otworz PuTTY lub miniterm na COM Pico @ 115200 baud
+    Wpisz +++ aby otworzyc menu zmiany baudrate
