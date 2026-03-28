@@ -10,18 +10,18 @@
                     ┌─────────────────────┐
                     │      [micro USB]    │◄──USB──  PC (PuTTY COM-A)
                     │                     │           terminal 1: bridge data
-   ─────────────────┤ GP0  [ 1]  TX  ●   ├──────────────────► RX
+   ─────────────────┤ GP0  [ 1]  TX  ●    ├──────────────────► RX
                     │                     │
-   ─────────────────┤ GP1  [ 2]  RX  ●   ├◄────────────────── TX
+   ─────────────────┤ GP1  [ 2]  RX  ●    ├◄────────────────── TX
                     │                     │
-   ─────────────────┤ GND  [ 3]  ■       ├──────────────────── GND  urzadzenia
+   ─────────────────┤ GND  [ 3]  ■        ├──────────────────── GND  urzadzenia
                     │             ■       ├──────────────────── GND  adaptera debug
                     │                     │
-                    ┤ GP2  [ 4]  CTS ●   ├◄────────────────── RTS  urzadzenia
+                    ┤ GP2  [ 4]  CTS ●    ├◄────────────────── RTS  urzadzenia
                     │                     │
-                    ┤ GP3  [ 5]  RTS ●   ├──────────────────► CTS  urzadzenia
+                    ┤ GP3  [ 5]  RTS ●    ├──────────────────► CTS  urzadzenia
                     │                     │
-                    ┤ GP4  [ 6]  DBG ●   ├──────────────────► RX   adaptera debug
+                    ┤ GP4  [ 6]  DBG ●    ├──────────────────► RX   adaptera debug
                     │             TX      │
                     │     (inne piny      │
                     │      nieuzywane)    │
