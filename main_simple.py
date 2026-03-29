@@ -1,4 +1,4 @@
-﻿"""
+"""
 Raspberry Pi Pico - Prosty UART bridge bez menu
 ================================================
 Pico GP0 (TX, pin 1)  -> (RX) urzadzenia
