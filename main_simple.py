@@ -29,5 +29,7 @@ while True:
             led.toggle()
     n = uart.any()
     if n:
-        sys.stdout.buffer.write(uart.read(n))
-        led.toggle()
+        r = uart.read(n)
+        if r:
+            sys.stdout.buffer.write(r)
+            led.toggle()
